@@ -1,5 +1,6 @@
-# TODO: Your name, Cornell NetID
-# TODO: Your Partner's name, Cornell NetID
+# TODO: Rain Liang, XL778
+# TODO: Thomas Kennedy Shanahan, TKS46
+
 
 import dynamic_programming
 
@@ -32,20 +33,24 @@ class DiffingCell:
 def fill_cell(table, i, j, s, t, cost):
     if (i == -1 & j == -1):
         return DiffingCell('-', '-', 0)
-
+    # Find All Combinations
     s_dash = cost(s[i], '-')
     t_dash = cost('-', t[j])
     s_t = cost(s[i], t[j])
+    # Fill up the first row
     if (i == -1):
         return DiffingCell('-', t[j], table.get(i, j-1).cost + t_dash)
 
+    # Fill up the first column
     if (j == -1):
         return DiffingCell(s[i], '-', table.get(i-1, j).cost + s_dash)
 
+    # Cost from three directions
     cost1 = table.get(i-1, j-1).cost + s_t
     cost2 = table.get(i-1, j).cost + s_dash
     cost3 = table.get(i, j-1).cost + t_dash
 
+    # Min cost
     cost = min(cost1, cost2, cost3)
 
     if cost == cost1:
@@ -54,13 +59,13 @@ def fill_cell(table, i, j, s, t, cost):
         return DiffingCell(s[i], '-', cost)
     else:
         return DiffingCell('-', t[j], cost)
-    # return DiffingCell('a', 'a' , 0)
 
 # Input: n and m, represents the sizes of s and t respectively.
 # Should return a list of (i,j) tuples, in the order you would like fill_cell to be called
 
 
 def cell_ordering(n, m):
+    # Go in row by row
     order = []
     for i in range(-1, n):
         for j in range(-1, m):
@@ -78,6 +83,7 @@ def diff_from_table(s, t, table):
     j = len(t) - 1
     aligned_s = []
     aligned_t = []
+    # Trace back from the bottom corner
     while i+j > -2:
         cur_cell = table.get(i, j)
         if cur_cell.s_char != '-' and cur_cell.t_char != '-':
