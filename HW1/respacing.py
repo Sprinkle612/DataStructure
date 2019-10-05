@@ -34,7 +34,7 @@ def fill_cell(T, i, j, string, is_word):
     else:
         c = 1
         for x in range(i, j):
-            if T.get(i, x).value and T.get(i+c, j):
+            if T.get(i, x).value and T.get(i+c, j).value:
                 return RespaceTableCell(True, x)
             c += 1
 
@@ -61,8 +61,34 @@ def cell_ordering(N):
 def respace_from_table(s, table):
     result = ""
     space = []
-    i, j = len(s) - 1, len(s)-1
-    prec = len(s)
+    #-- Top Down --#
+    i, j = 0, len(s) - 1
+    while i < len(s):
+        if table.get(i, j).value:
+            space.append(table.get(i, j).index)
+            if table.get(i, j).index != None:
+                i = table.get(i, j).index + 1
+            else:
+                i += 1
+        else:
+            i += 1
+    #-- Low Down --#
+
+    # i, j = len(s) - 1, len(s) - 1
+    # prec = len(s) - 1
+    # while i >= 0:
+    #     print("I AM HERE!!!!!!", i)
+    #     if table.get(i, j).value:
+    #         if table.get(i, j).index != None:
+    #             space.insert(0, table.get(i, j).index)
+    #             i = table.get(i, j).index
+    #         else:
+    #             space.insert(0, i-1)
+    #             i += -1
+    #     else:
+    #         i += -1
+    # i, j = len(s) - 1, len(s)-1
+    # prec = len(s)
     # while i >= 0:
     #     if table.get(i, j).value and i == prec - 1:
     #         print("I am here!", i)
@@ -74,11 +100,14 @@ def respace_from_table(s, table):
     #             space.append(i-1)
     #             prec = i-1
     #     i += -1
+    if len(space) == 0:
+        return ""
 
     for c in range(len(s)):
         result += s[c]
         if c in space:
             result += ' '
+
     return result
 
 
